@@ -49,3 +49,22 @@ plt.plot(x, y)
 plt.ylim(-1.0, 5.1) # y축 범위 지정
 plt.show()
 ##########################################
+
+# 다차원 행렬 곱셈
+A = np.array([[1,2], [3,4]])
+print(A.shape)
+B = np.array([[5,6], [7,8]])
+print(B.shape)
+print(np.dot(A, B))
+print("------")
+print(A*B)
+
+# 신경망에서의 행렬 곱
+print("신경망에서의 행렬 곱")
+x = np.array([1,2])
+print(x.shape)
+w = np.array([[1,3,5],[2,4,6]])
+print(w.shape)
+y = np.dot(x,w)
+print(y)
+
