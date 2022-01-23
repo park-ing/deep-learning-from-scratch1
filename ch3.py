@@ -23,9 +23,9 @@ print(step_function(x))
 # 그래프 그리기
 x = np.arange(-5.0, 5.0, 0.1) # -5.0에서 5.0 전까지 0.1 간격의 넘파이 배열을 생성
 y = step_function(x)
-plt.plot(x,y)
-plt.ylim(-0.1, 1.1) # y축 범위 지정
-plt.show()
+#plt.plot(x,y)
+#plt.ylim(-0.1, 1.1) # y축 범위 지정
+#plt.show()
 
 ##########################################
 # sigmoid 함수 그리기
@@ -34,9 +34,9 @@ def sigmoid(x):
 
 x = np.arange(-5.0, 5.0, 0.1)
 y = sigmoid(x)
-plt.plot(x, y)
-plt.ylim(-0.1, 1.1) # y축 범위 지정
-plt.show()
+#plt.plot(x, y)
+#plt.ylim(-0.1, 1.1) # y축 범위 지정
+#plt.show()
 
 ##########################################
 # ReLU 함수 그리기
@@ -45,9 +45,9 @@ def relu(x):
 
 x = np.arange(-5.0, 5.0, 0.1)
 y = relu(x)
-plt.plot(x, y)
-plt.ylim(-1.0, 5.1) # y축 범위 지정
-plt.show()
+#plt.plot(x, y)
+#plt.ylim(-1.0, 5.1) # y축 범위 지정
+#plt.show()
 ##########################################
 
 # 다차원 행렬 곱셈
@@ -68,3 +68,81 @@ print(w.shape)
 y = np.dot(x,w)
 print(y)
 
+############################################
+# 3층 신경망 구현
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def relu(x):
+    return np.maximum(0, x)
+
+# 가중치를 임의로 설정
+def init_network():
+    network = {}
+    network['W1'] = np.array([[0.1,0.3,0.5],[0.2,0.4,0.6]]) # w의 열의 개수만큼 은닉층 노드가 생성된다.
+    network['b1'] = np.array([0.1,0.2,0.3]) # w의 열의 개수만큼 bias 설정
+    network['W2'] = np.array([[0.1,0.4],[0.2,0.5],[0.3,0.6]])
+    network['b2'] = np.array([0.1,0.2])
+    network['W3'] = np.array([[0.1,0.3],[0.2,0.4]])
+    network['b3'] = np.array([0.1,0.2])
+
+    return network
+
+def forward(network, x):
+    W1,W2,W3 = network['W1'],network['W2'],network['W3']
+    b1,b2,b3 = network['b1'],network['b2'],network['b3']
+
+    a1 = np.dot(x,W1) + b1
+    z1 = sigmoid(a1)
+    a2 = np.dot(z1,W2) + b2
+    z2 = relu(a2)
+    a3 = np.dot(z2,W3) + b3
+    y = a3
+
+    return y
+
+network = init_network()
+x = np.array([1.0,0.5])
+y = forward(network,x)
+print(y) # [0.39442138 0.84045873]
+
+##########################################
+# 소프트맥스 함수
+a = np.array([0.3, 2.9, 4.0])
+exp_a = np.exp(a)
+print(exp_a) # [1.34985881 18.17414537 54.59815003]
+
+sum_exp_a = np.sum(exp_a)
+print(sum_exp_a) # 74.1221542101633
+
+y = exp_a / sum_exp_a
+print(y) # [0.01821127 0.24519181 0.73659691] -> 원소들의 총합은 언제나 1
+'''
+def softmax(a): # 오버플로 보정 전 
+    exp_a = np.exp(a)
+    sum_exp_a = np.sum(exp_a)
+    y = exp_a / sum_exp_a
+
+    return y 
+'''
+
+a = np.array([1010, 1000, 990])
+print(np.exp(a) / np.sum(np.exp(a))) # 소프트맥스 함수의 계산/ [nan nan nan] -> 제대로 계산되지 않는다.
+
+c = np.max(a) # c = 1010(최대값)
+print(a - c) # [0 -10 -20]
+
+print(np.exp(a-c) / np.sum(np.exp(a-c))) # [9.99954600e-01 4.53978686e-05 2.06106005e-09] -> 제대로 계산 된다.
+
+def softmax(a): ##### 오버플로 보정 후
+    c = np.max(a)
+    exp_a = np.exp(a - c)
+    sum_exp_a = np.sum(exp_a)
+    y = exp_a / sum_exp_a
+
+    return y 
+
+t = np.array([0.3, 2.9, 4.0])
+y = softmax(t)
+print(y) # [0.01821127 0.24519181 0.73659691]
+print(np.sum(y)) # 출력의 총합은 1
