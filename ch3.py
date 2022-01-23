@@ -26,3 +26,26 @@ y = step_function(x)
 plt.plot(x,y)
 plt.ylim(-0.1, 1.1) # y축 범위 지정
 plt.show()
+
+##########################################
+# sigmoid 함수 그리기
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+x = np.arange(-5.0, 5.0, 0.1)
+y = sigmoid(x)
+plt.plot(x, y)
+plt.ylim(-0.1, 1.1) # y축 범위 지정
+plt.show()
+
+##########################################
+# ReLU 함수 그리기
+def relu(x):
+    return np.maximum(0, x)
+
+x = np.arange(-5.0, 5.0, 0.1)
+y = relu(x)
+plt.plot(x, y)
+plt.ylim(-1.0, 5.1) # y축 범위 지정
+plt.show()
+##########################################
