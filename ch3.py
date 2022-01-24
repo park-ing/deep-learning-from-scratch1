@@ -146,3 +146,84 @@ t = np.array([0.3, 2.9, 4.0])
 y = softmax(t)
 print(y) # [0.01821127 0.24519181 0.73659691]
 print(np.sum(y)) # 출력의 총합은 1
+
+############################################
+# 손글씨 숫자 인식
+# MNIST
+from dataset.mnist import load_mnist
+from PIL import Image
+
+# (훈련 이미지, 훈련 레이블), (시험 이미지, 시험 레이블)
+(x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize = False)
+
+print(x_train.shape) # (60000, 784)
+print(t_train.shape) # (60000,)
+print(x_test.shape) # (10000, 784)
+print(t_test.shape) # (10000,)
+
+# 이미지 하나 출력
+img = x_train[0]
+label = t_train[0]
+print(img.shape)
+img = img.reshape(28,28)
+
+def img_show(img):
+    pil_img = Image.fromarray(np.uint8(img)) # numpy로 저장된 이미지 데이터를 PIL용 데이터 객체로 변환
+    pil_img.show()
+
+#img_show(img)
+
+###### 신경망의 추론 처리
+import pickle
+
+def get_data():
+    (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, flatten=True, one_hot_label=False)
+    return x_train, t_train
+
+def init_network():
+    with open("sample_weight.pkl", 'rb') as f:
+        network = pickle.load(f)
+    
+    return network
+
+def predict(network, x):
+    W1,W2,W3 = network['W1'],network['W2'],network['W3']
+    b1,b2,b3 = network['b1'],network['b2'],network['b3']
+
+    a1 = np.dot(x,W1) + b1
+    z1 = sigmoid(a1)
+    a2 = np.dot(z1,W2) + b2
+    z2 = relu(a2)
+    a3 = np.dot(z2,W3) + b3
+    y = softmax(a3)
+
+    return y
+
+x, t = get_data()
+network = init_network()
+
+accuracy_cnt = 0
+for i in range (len(x)):
+    y = predict(network, x[i])
+    p = np.argmax(y) # 확률이 가장 높은 원소의 인덱스를 얻는다.
+    if p == t[i]:
+        accuracy_cnt += 1
+
+print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+
+########################
+# 배치처리 구현
+# 배치 처리 구현
+x, t = get_data()
+network = init_network()
+
+batch_size = 100  # 배치 크기
+accuracy_cnt = 0
+
+for i in range (0, len(x), batch_size):
+    x_batch = x[i:i+batch_size]
+    y_batch = predict(network, x_batch)
+    p = np.argmax(y_batch, axis = 1)
+    accuracy_cnt += np.sum(p==t[i:i+batch_size])
+
+print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
