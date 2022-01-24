@@ -212,8 +212,7 @@ for i in range (len(x)):
 print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 
 ########################
-# 배치처리 구현
-# 배치 처리 구현
+# 배치처리 구현 -> 계산 속도가 더 빠르다.
 x, t = get_data()
 network = init_network()
 
