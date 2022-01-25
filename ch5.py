@@ -121,3 +121,20 @@ print(mask)
 [[False  True]
  [ True False]]
 '''
+
+# 시그모이드
+# 순전파의 출력만으로 역전파를 계산할 수 있다.
+class Sigmoid:
+    def __init__(self):
+        self.out = None
+
+    def forward(self, x):
+        out = 1 / (1 + np.exp(-x))
+        self.out = out
+
+        return out
+
+    def backward(self, dout):
+        dx = dout * (1.0 - self.out) * self.out
+
+        return dx
