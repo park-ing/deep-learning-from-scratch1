@@ -1,5 +1,5 @@
 #chapter5 오차역전파법
-
+import numpy as np
 ######################
 # 단순한 역전파 계층 구현하기
 # 역전파 곱셈 계층
@@ -88,3 +88,36 @@ print("dOrange:", dorange)
 print("dOrange_num:", int(dorange_num))
 print("dTax:", dtax)
 
+#####################
+# 활성화 함수 계층 구현하기
+# ReLU 함수
+
+# 전기 회로의 '스위치'에 비유할 수 있다.
+class Relu:
+    def __init__(self):
+        self.mask = None
+
+    def forward(self, x):
+        self.mask = (x <= 0)
+        out = x.copy()
+        out[self.mask] = 0
+
+        return out
+
+    def backward(self, dout):
+        dout[self.mask] = 0
+        dx = dout
+
+        return dx
+
+x = np.array([[1.0, -0.5], [-2.0, 3.0]])
+print(x)
+mask = (x<= 0)
+print(mask)
+
+'''
+[[ 1.  -0.5]
+ [-2.   3. ]]
+[[False  True]
+ [ True False]]
+'''
