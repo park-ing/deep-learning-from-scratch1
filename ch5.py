@@ -317,4 +317,16 @@ for i in range(iters_num):
         train_acc_list.append(train_acc)
         test_acc_list.append(test_acc)
         print("train acc, test acc | "+ str(train_acc) + ", " + str(test_acc))
-        
+
+'''
+>>> layers['A'] = [1,2,3,4,5]
+>>> layers['B'] = [6,7,8,9,10]
+>>> layers
+OrderedDict([('A', [1, 2, 3, 4, 5]), ('B', [6, 7, 8, 9, 10])])
+>>> layers.values()
+odict_values([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])
+>>> list(layers.values())
+[[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]
+*def gradient 에서 원래 class 안의 layers의 순서는 affine1, affine2 이렇게 되어 있기 때문에 
+역전파 할 때는 오른쪽에서 왼쪽으로, 즉 순서를 반대로(reverse())해서 계산해야 한다.
+'''
