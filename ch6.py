@@ -166,8 +166,11 @@ for key in optimizers:
 plt.show()
 
 
+from dataset.mnist import load_mnist
+from common.util import smooth_curve
+from common.multi_layer_net import MultiLayerNet
+from common.optimizer import *
 
-'''
 ######MNIST 데이터셋으로 갱신 방법 비교
 # 0. MNIST 데이터 읽기==========
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True)
@@ -224,4 +227,3 @@ plt.ylabel("loss")
 plt.ylim(0, 1)
 plt.legend()
 plt.show()
-'''
