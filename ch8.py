@@ -154,3 +154,5 @@ trainer.train()
 # 매개변수 보관
 network.save_params("deep_convnet_params.pkl")
 print("Saved Network Parameters!")
+
+# chapter8은 다양한 딥러닝 기법 소개
